@@ -45,11 +45,11 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-    <key>gamecode</key>
-    <string>123</string>
-    <key>zchannelid</key>
-    <string>123</string>
-    <key>zkey</key>
-    <string>3756116173</string>
+	<key>gamecode</key>
+	<string>123</string>
+	<key>zchannelid</key>
+	<string>123</string>
+	<key>zkey</key>
+	<string>3756116173</string>
 </dict>
 </plist>
