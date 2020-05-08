@@ -298,16 +298,6 @@
 - (void)warningVcHasBeenShown {
     [self addLog:@"warningVcHasBeenShown"];
     NSLog(@"AA---warningVcHasBeenShown");
-    self.mask = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    self.mask.backgroundColor = [UIColor blackColor];
-    self.mask.alpha = 0.5;
-    [self.view addSubview:self.mask];
-}
-// 用户在提示界面点击登录
-- (void)userClickLoginButton {
-    [self addLog:@"userClickLoginButton"];
-    NSLog(@"AA---userClickLoginButton");
-    [self showLoginViewController];
 }
 // 用户在提示界面点击退出游戏
 - (void)userClickLoginOutButton {
@@ -317,7 +307,6 @@
         [self.mask removeFromSuperview];
     }
 }
-
 // 用户在提示界面点击确定
 - (void)userClickConfirmButton {
     [self addLog:@"userClickConfirmButton"];
@@ -329,6 +318,21 @@
     hud.mode = RPProgressHUDModeText;
     hud.label.text = NSLocalizedString(@"支付失败", @"HUD message title");
     [hud hideAnimated:YES afterDelay:1.f];
+}
+
+// 用户支付失败时，在提示界面点击登录
+- (void)userClickLoginButtonInPaymentWarningVc {
+    NSLog(@"AA---userClickLoginButtonInPaymentWarningVc");
+    [self showLoginViewController];
+}
+// 用户游戏时长不足时，在提示界面点击登录
+- (void)userClickLoginButtonInNoTimeLeftWarningVc {
+    NSLog(@"AA---userClickLoginButtonInNoTimeLeftWarningVc");
+    [self showLoginViewController];
+    self.mask = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    self.mask.backgroundColor = [UIColor blackColor];
+    self.mask.alpha = 0.5;
+    [self.view addSubview:self.mask];
 }
 
 // 不可支付
