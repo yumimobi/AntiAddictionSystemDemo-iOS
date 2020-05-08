@@ -28,6 +28,7 @@
 @property (nonatomic) UIButton *payNumberCheck;
 @property (nonatomic) UIButton *paySuccess;
 @property (nonatomic) UIView *mask;
+@property (nonatomic) UITextView *console;
 
 @property (nonatomic) AAPrivacyPolicyViewController *privacyPolicyVC;
 @property (nonatomic) AALoginViewController *loginVc;
@@ -177,6 +178,30 @@
         make.centerX.equalTo(self.view.mas_centerX);
         make.size.mas_greaterThanOrEqualTo(CGSizeMake(paySuccessSize.width, paySuccessSize.height));
     }];
+    
+    self.console = [[UITextView alloc] init];
+    self.console.backgroundColor = [UIColor grayColor];
+    [self.view addSubview:self.console];
+    [self.console mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.paySuccess.mas_bottom).with.offset(margin);
+        make.width.equalTo(self.view.mas_width).with.multipliedBy(0.8);
+        make.bottom.equalTo(self.view.mas_bottom);
+        make.centerX.equalTo(self.view.mas_centerX);
+    }];
+}
+
+- (void)addLog:(NSString *)newLog {
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        weakSelf.console.layoutManager.allowsNonContiguousLayout = NO;
+        NSString *oldLog = weakSelf.console.text;
+        NSString *text = [NSString stringWithFormat:@"%@\n%@", oldLog, newLog];
+        if (oldLog.length == 0) {
+            text = [NSString stringWithFormat:@"%@", newLog];
+        }
+        [weakSelf.console scrollRangeToVisible:NSMakeRange(text.length, 1)];
+        weakSelf.console.text = text;
+    });
 }
 
 - (void)paySuccessMethod {
@@ -218,15 +243,19 @@
 #pragma mark - notification delegate
 // 隐私弹框已经展示
 - (void)privacyPolicyViewControllerHasBeenShown {
+    [self addLog:@"privacyPolicyViewControllerHasBeenShown"];
     NSLog(@"AA---privacyPolicyViewControllerHasBeenShown");
 }
 // 用户同意隐私政策
 - (void)userAgreesToPrivacyPolicy {
+    [self addLog:@"userAgreesToPrivacyPolicy"];
     NSLog(@"AA---userAgreesToPrivacyPolicy");
 }
 
 // 登录成功
 - (void)loginSuccessWith:(NSString *)zplayKey {
+    NSString *str = [[NSString alloc] initWithFormat:@"loginSuccess. zplayKey:%@",zplayKey];
+    [self addLog:str];
     NSLog(@"AA---loginSuccess");
     if (self.mask) {
         [self.mask removeFromSuperview];
@@ -234,44 +263,55 @@
 }
 // 登录失败
 - (void)loginFail {
+    [self addLog:@"loginFail"];
     NSLog(@"AA---loginFail");
 }
 // 开始展示用户登录界面
 - (void)loginViewControllerHasBeenShown {
+    [self addLog:@"loginViewControllerHasBeenShown"];
     NSLog(@"AA---loginViewControllerHasBeenShown");
 }
 // 登录界面消失
 - (void)loginViewControllerHasBeenDismissed {
+    [self addLog:@"loginViewControllerHasBeenDismissed"];
     NSLog(@"AA---loginViewControllerHasBeenDismissed");
 }
 // 注销登录
 - (void)loginOutSuccessfull {
+    [self addLog:@"loginOutSuccessfull"];
     NSLog(@"AA---loginOutSuccessful");
 }
 
 // 实名认证界面已经展示
 - (void)userAuthVcHasBeenShown {
+    [self addLog:@"userAuthVcHasBeenShown"];
     NSLog(@"AA---userAuthVcHasBeenShown");
 }
 // 实名认证成功
 - (void)userAuthSuccessWithRemainTime:(NSNumber *)remainTime {
+    NSString *str = [[NSString alloc] initWithFormat:@"userAuthSuccessWithRemainTime. remainTime:%@",remainTime];
+    [self addLog:str];
     NSLog(@"AA---userAuthSuccess");
 }
 
 // warning vc已展示
 - (void)warningVcHasBeenShown {
+    [self addLog:@"warningVcHasBeenShown"];
     NSLog(@"AA---warningVcHasBeenShown");
     self.mask = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.mask.backgroundColor = [UIColor blackColor];
+    self.mask.alpha = 0.5;
     [self.view addSubview:self.mask];
 }
 // 用户在提示界面点击登录
 - (void)userClickLoginButton {
+    [self addLog:@"userClickLoginButton"];
     NSLog(@"AA---userClickLoginButton");
     [self showLoginViewController];
 }
 // 用户在提示界面点击退出游戏
 - (void)userClickLoginOutButton {
+    [self addLog:@"userClickLoginOutButton"];
     NSLog(@"AA---userClickLoginOutButton");
     if (self.mask) {
         [self.mask removeFromSuperview];
@@ -280,6 +320,7 @@
 
 // 用户在提示界面点击确定
 - (void)userClickConfirmButton {
+    [self addLog:@"userClickConfirmButton"];
     NSLog(@"AA---userClickConfirmButton");
     if (self.mask) {
         [self.mask removeFromSuperview];
@@ -292,10 +333,12 @@
 
 // 不可支付
 - (void)paymentIsRestricted {
+    [self addLog:@"paymentIsRestricted"];
     NSLog(@"AA---paymentIsRestricted");
 }
 // 可以支付
 - (void)paymentUnlimited {
+    [self addLog:@"paymentUnlimited"];
     NSLog(@"AA---paymentUnlimited");
 }
 
