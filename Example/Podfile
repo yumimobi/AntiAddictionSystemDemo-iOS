@@ -1,0 +1,13 @@
+use_frameworks!
+
+platform :ios, '8.0'
+
+target 'AntiAddictionSystemDemo-iOS_Example' do
+  pod 'AntiAddictionSystemDemo-iOS', :path => '../'
+
+  target 'AntiAddictionSystemDemo-iOS_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
