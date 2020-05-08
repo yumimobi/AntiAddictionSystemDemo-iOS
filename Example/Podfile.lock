@@ -14,7 +14,7 @@ PODS:
   - AFNetworking/Serialization (3.2.1)
   - AFNetworking/UIKit (3.2.1):
     - AFNetworking/NSURLSession
-  - AntiAddictionSystem (1.0.0):
+  - AntiAddictionSystem (0.1.0):
     - AFNetworking (~> 3.0)
     - Masonry (~> 1.1.0)
     - YYModel (~> 1.0)
@@ -22,7 +22,7 @@ PODS:
   - YYModel (1.0.4)
 
 DEPENDENCIES:
-  - AntiAddictionSystem
+  - AntiAddictionSystem (= 0.1.0)
 
 SPEC REPOS:
   trunk:
@@ -33,10 +33,10 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
-  AntiAddictionSystem: 84523072e7ebf097707e2977b34098fafb2149fa
+  AntiAddictionSystem: 3cae4395f0a48821546f46466c165da6c7450436
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
-PODFILE CHECKSUM: 98b6a14fe46da102d15a7ded1adcb1646440bbe8
+PODFILE CHECKSUM: 39ee5321161ea69857b96ba1c1d07ba4588dc975
 
 COCOAPODS: 1.9.0
