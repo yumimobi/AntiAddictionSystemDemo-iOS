@@ -119,10 +119,17 @@ pod install --repo-update
 - (void)warningVcHasBeenShown {
     NSLog(@"AA---warningVcHasBeenShown");
 }
-// 用户在提示界面点击登录
+
+// 用户支付失败时，在提示界面点击登录
 // 需在此调用适合您应用的登录方式
-- (void)userClickLoginButton {
-    NSLog(@"AA---userClickLoginButton");
+- (void)userClickLoginButtonInPaymentWarningVc {
+   NSLog(@"AA---userClickLoginButtonInPaymentWarningVc");
+}
+// 用户游戏时长不足时，在提示界面点击登录
+// 需在此调用适合您应用的登录方式
+// 如用户在登录成功前关闭登录界面，应处理用户不可玩逻辑
+- (void)userClickLoginButtonInNoTimeLeftWarningVc {
+   NSLog(@"AA---userClickLoginButtonInNoTimeLeftWarningVc");
 }
 // 用户在提示界面点击退出游戏
 - (void)userClickLoginOutButton {
