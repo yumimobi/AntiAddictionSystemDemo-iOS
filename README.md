@@ -1,29 +1,405 @@
-# AntiAddictionSystemDemo-iOS
+[See the English Guide](https://github.com/Atmosplay/AtmosplayAds-iOS/wiki)
 
-[![CI Status](https://img.shields.io/travis/wzy2010416033@163.com/AntiAddictionSystemDemo-iOS.svg?style=flat)](https://travis-ci.org/wzy2010416033@163.com/AntiAddictionSystemDemo-iOS)
-[![Version](https://img.shields.io/cocoapods/v/AntiAddictionSystemDemo-iOS.svg?style=flat)](https://cocoapods.org/pods/AntiAddictionSystemDemo-iOS)
-[![License](https://img.shields.io/cocoapods/l/AntiAddictionSystemDemo-iOS.svg?style=flat)](https://cocoapods.org/pods/AntiAddictionSystemDemo-iOS)
-[![Platform](https://img.shields.io/cocoapods/p/AntiAddictionSystemDemo-iOS.svg?style=flat)](https://cocoapods.org/pods/AntiAddictionSystemDemo-iOS)
+# 入门指南
 
-## Example
+本指南适用于希望通过 AntiAddictionSystem-iOS 接入防沉迷功能的发布商。
 
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
+# 前提条件
 
-## Requirements
+- 使用 Xcode 10.0 或更高版本。
+- 使用 iOS 8.0 或更高版本。
+- 在 info.plist 中添加如下ID,获取方式请咨询产品。
+   ```
+    <key>gamecode</key>
+	<string>123</string>
+	<key>zchannelid</key>
+	<string>123</string>
+	<key>zkey</key>
+	<string>3756116173</string>
+   ```
 
-## Installation
+# 导入防沉迷 SDK
+## CocoaPods（首选）
 
-AntiAddictionSystemDemo-iOS is available through [CocoaPods](https://cocoapods.org). To install
-it, simply add the following line to your Podfile:
+要将该 SDK 导入 iOS 项目，最简便的方法就是使用 [CocoaPods](https://guides.cocoapods.org/using/getting-started)。  
+请打开项目的 Podfile 并将下面这行代码添加到应用的目标中：  
 
 ```ruby
-pod 'AntiAddictionSystemDemo-iOS'
+pod 'AntiAddictionSystem'
 ```
 
-## Author
+然后使用命令行运行：
 
-wzy2010416033@163.com, wzy2010416033@163.com
+```s
+pod install --repo-update
+```
 
-## License
+如果您刚开始接触 CocoaPods，请参阅其[官方文档](https://guides.cocoapods.org/using/using-cocoapods)，了解如何创建和使用 Podfile。
 
-AntiAddictionSystemDemo-iOS is available under the MIT license. See the LICENSE file for more info.
+## 手动下载
+
+1. 直接下载并解压缩 [SDK 框架](https://adsdk.yumimobi.com/iOS/AtmosplayAds/3.0.0_2019122001.tar.bz2)，然后将以下框架导入您的 Xcode 项目中：
+
+<img src='resources/add_files.png'>
+
+2. 将 `-ObjC` 链接器标记添加到项目的 Build Settings 下的 `Other Linker Flags` 中：
+
+<img src='resources/add_objc.png'>
+
+3. 将以下动态库添加到您的工程中：
+   - `AdSupport`
+
+# 快速接入
+## 监听回调
+您需要监听SDK的各项回调，依次进行app逻辑控制。
+例如：
+1. 当用户在提示界面点击登录按钮时，您需选择适合您应用的登录方式，展示登录界面。
+
+
+```
+// 导入头文件
+#import <AntiAddictionSystem/AANotification.h>
+// 遵循协议
+@interface AAViewController ()<AANotificationDelegate>
+
+@end
+
+@implementation AAViewController
+
+- (void)viewDidLoad
+{
+   [super viewDidLoad];
+   // 设置AANotification的代理为当前类
+   [AANotification shared].delegate = self;
+}
+
+// 监听回调
+#pragma mark - notification delegate
+// 隐私弹框已经展示
+- (void)privacyPolicyViewControllerHasBeenShown {
+    NSLog(@"AA---privacyPolicyViewControllerHasBeenShown");
+}
+// 用户同意隐私政策
+- (void)userAgreesToPrivacyPolicy {
+    NSLog(@"AA---userAgreesToPrivacyPolicy");
+}
+
+// 登录成功
+- (void)loginSuccessWith:(NSString *)zplayKey {
+    NSLog(@"AA---loginSuccess");
+}
+// 登录失败
+- (void)loginFail {
+    NSLog(@"AA---loginFail");
+}
+// 开始展示用户登录界面
+- (void)loginViewControllerHasBeenShown {
+    NSLog(@"AA---loginViewControllerHasBeenShown");
+}
+// 登录界面消失
+- (void)loginViewControllerHasBeenDismissed {
+    NSLog(@"AA---loginViewControllerHasBeenDismissed");
+}
+// 注销登录
+- (void)loginOutSuccessfull {
+    NSLog(@"AA---loginOutSuccessful");
+}
+
+// 实名认证界面已经展示
+- (void)userAuthVcHasBeenShown {
+    NSLog(@"AA---userAuthVcHasBeenShown");
+}
+// 实名认证成功
+- (void)userAuthSuccessWithRemainTime:(NSNumber *)remainTime {
+    NSLog(@"AA---userAuthSuccess");
+}
+
+// 提示界面已展示
+// 可玩时长不足及不可支付时会弹出提示界面
+- (void)warningVcHasBeenShown {
+    NSLog(@"AA---warningVcHasBeenShown");
+}
+// 用户在提示界面点击登录
+// 需在此调用适合您应用的登录方式
+- (void)userClickLoginButton {
+    NSLog(@"AA---userClickLoginButton");
+}
+// 用户在提示界面点击退出游戏
+- (void)userClickLoginOutButton {
+    NSLog(@"AA---userClickLoginOutButton");
+}
+
+// 用户在提示界面点击确定
+// 未成年用户支付失败情况
+- (void)userClickConfirmButton {
+    NSLog(@"AA---userClickConfirmButton");
+}
+
+// 支付前调用`checkNumberLimitBeforePayment:`检测用户是否可以支付
+// 不可支付
+- (void)paymentIsRestricted {
+    [self addLog:@"paymentIsRestricted"];
+    NSLog(@"AA---paymentIsRestricted");
+}
+// 可以支付
+- (void)paymentUnlimited {
+    [self addLog:@"paymentUnlimited"];
+    NSLog(@"AA---paymentUnlimited");
+}
+
+@end
+```
+
+## 展示隐私政策界面
+隐私政策界面为SDK入口，请确保在应用启动时，调用此方法（确保根控制器已初始化）。
+您无需判断用户是否已经同意隐私政策，SDK会自行判断。
+用户同意隐私政策后，SDK会自动将其注册为游客状态。
+```
+// 导入头文件
+#import <AntiAddictionSystem/AAPrivacyPolicyViewController.h>
+
+@interface AAViewController ()<AANotificationDelegate>
+@property (nonatomic) AAPrivacyPolicyViewController *privacyPolicyVC;
+
+@end
+
+@implementation AAViewController
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    [AANotification shared].delegate = self;
+
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [self showPrivacyPolicyViewController];
+}
+
+- (void)showPrivacyPolicyViewController {
+    self.privacyPolicyVC = [[AAPrivacyPolicyViewController alloc] init];
+    [self.privacyPolicyVC showPrivacyPolicyViewWithRootViewController:rootViewController];
+}
+@end
+```
+
+## 展示登录界面
+在游客状态，您可以调用以下登录方式（四选一），将游客升级为正式用户。
+登录成功后，如用户未进行实名认证，SDK将自动弹出实名认证界面，如您未使用防沉迷SDK提供的登录界面，请确保您的登录界面消失后再调用如下方法。
+
+### 使用防沉迷SDK提供的登录界面
+使用此界面，用户登录逻辑将由防沉迷SDK实现，你可监听登录相关回调，进行对应操作。
+```
+// 导入头文件
+#import <AntiAddictionSystem/AALoginViewController.h>
+
+@interface AAViewController ()<AANotificationDelegate>
+@property (nonatomic) AALoginViewController *loginVc;
+
+@end
+
+@implementation AAViewController
+- (void)showLoginViewController {
+    self.loginVc = [[AALoginViewController alloc] init];
+    [self.loginVc showLoginViewControllerWith:rootViewController];
+}
+@end
+```
+
+### 仅使用帐号密码登录
+如您使用自己的帐号体系，请将用户名，密码传递给防沉迷SDK。
+```
+// 导入头文件
+#import <AntiAddictionSystem/AALogin.h>
+@interface AAViewController ()<AANotificationDelegate>
+@property (nonatomic) AALogin *loginManager;
+
+@end
+
+- (void)userNameAndPasswordLogin {
+    self.loginManager = [[AALogin alloc] init];
+    // 使用帐号密码注册
+    // username: 用户帐号
+    // password: 用户密码
+    [self.loginManager loginWithUserName:@"userName" password:@"password" success:^(NSString * _Nonnull zplayID) {
+    } 
+    failure:^(NSError * _Nonnull error) {    
+    }];
+}
+```
+
+### 使用三方平台进行登录
+如您使用其他三方SDK进行登录，例如微信。
+请调用以下方法。
+```
+// 导入头文件
+#import <AntiAddictionSystem/AALogin.h>
+@interface AAViewController ()<AANotificationDelegate>
+@property (nonatomic) AALogin *loginManager;
+
+@end
+
+- (void)loginWithThirdParty {
+    self.loginManager = [[AALogin alloc] init];
+    // 使用第三方平台登录SDK
+    // token: 如使用第三方登录（如微信），请使用三方登录SDK返回的唯一ID
+    // otherID: 如果三方登录平台d返回除token之外的ID，请将此ID赋值给此参数
+    // platformName : 三方平台名称（请联系产品获取）
+    [self.loginManager loginWithPlatformToken:@"token" otherID:@"otherID" platformName:@"wx"];
+}
+```
+
+### 使用Zplay登录SDK进行登录
+如您使用Zplay登录SDK，请在登录成功后将zplayKey传递给防沉迷SDK。
+```
+// 导入头文件
+#import <AntiAddictionSystem/AALogin.h>
+@interface AAViewController ()<AANotificationDelegate>
+@property (nonatomic) AALogin *loginManager;
+
+@end
+
+- (void)loginWithZplayID {
+    self.loginManager = [[AALogin alloc] init];
+    // 使用Zplay登录SDK
+    [self.loginManager loginWithZplayID:@"zplayID"];
+}
+```
+
+## 注销用户登录状态
+如您有切换帐号功能，请调用此接口，注销当前用户的登录状态。
+```
+// 导入头文件
+#import <AntiAddictionSystem/AALogin.h>
+@interface AAViewController ()<AANotificationDelegate>
+@property (nonatomic) AALogin *loginManager;
+
+@end
+
+- (void)loginOut {
+    self.loginManager = [[AALogin alloc] init];
+    // 使用Zplay登录SDK
+    [self.loginManager loginOut];
+}
+```
+
+## 展示实名认证界面
+用户处于游客状态时，您可以根据应用需求决定是否提示用户进行实名认证。
+如果用户已登录，您不需关心用户实名认证状态，防沉迷SDK将自动处理。
+```
+// 导入头文件
+#import <AntiAddictionSystem/AAUserAuthenticationViewController.h>
+
+@interface AAViewController ()<AANotificationDelegate>
+@property (nonatomic) AAUserAuthenticationViewController *authVc;
+
+@end
+
+@implementation AAViewController
+- (void)showAuthViewController {
+    self.authVc = [[AAUserAuthenticationViewController alloc] init];
+    [self.authVc showUserAuthenticationViewControllerWith:rootViewController];
+}
+@end
+```
+
+## 支付相关接口
+根据国家规定，对未成年人在游戏中的单笔付费金额和每月累计付费金额都有限制，因此在用户发起支付时需要调用`检测本次用户购买是否可以支付`接口，用户购买成功后需要调用`用户支付成功上报`接口。
+
+### 检测本次用户购买是否可以支付
+您可通过监听`paymentIsRestricted`,`paymentUnlimited`获知用户是否可以进行支付。
+```
+// 导入头文件
+#import <AntiAddictionSystem/AAPayNumberReport.h>
+@interface AAViewController ()<AANotificationDelegate>
+@property (nonatomic) AAPayNumberReport *payReport;
+
+@end
+
+@implementation AAViewController
+
+- (void)payMethodOne {
+    self.payReport = [[AAPayNumberReport alloc] init];
+    // 支付前检查用户是否被限额（成年人不受限制）
+    // paynumber: 付费金额，单位分
+    [self.payReport reportNumberAfterPayment:payNumber];
+}
+@end
+```
+
+### 用户支付成功上报
+用户支付成功后，需将用户本次购买金额上报给防沉迷系统。
+
+```
+// 导入头文件
+#import <AntiAddictionSystem/AAPayNumberReport.h>
+@interface AAViewController ()<AANotificationDelegate>
+@property (nonatomic) AAPayNumberReport *payReport;
+
+@end
+
+@implementation AAViewController
+
+- (void)payMethodOne {
+    self.payReport = [[AAPayNumberReport alloc] init];
+    // 支付成功后上报玩家支付金额
+    // payNumber: 付费金额，单位分
+    [self.payReport reportNumberAfterPayment:payNumber];
+}
+@end
+```
+
+### 获取用户登录状态
+```
+typedef enum : NSUInteger {
+    // 未知
+    AAUserLoginUnknow,
+    // 游客
+    AAUserNotLogin,
+    // 正式用户
+    AAUserIsLogin
+}AAUserLoginStatus;
+```
+
+```
+#import <AntiAddictionSystem/AANotification.h>
+@interface AAViewController ()<AANotificationDelegate>
+@property (nonatomic) AALogin *loginManager;
+
+@end
+
+@implementation AAViewController
+- (void)getUserLoginStatusMethod {
+   AAUserLoginStatus loginStatus = 0;
+   self.loginManager = [[AALogin alloc] init];
+   loginStatus = [self.loginManager getUserLoginStatus];
+}
+@end
+```
+### 获取用户实名认证状态
+```
+typedef enum : NSUInteger {
+    // 未知
+    AAUserAgeUnknow,
+    // 已成年
+    AAUserAdult,
+    // 未成年
+    AAUserUnderAge
+}AAUserAgeGroup;
+```
+
+```
+#import <AntiAddictionSystem/AANotification.h>
+@interface AAViewController ()<AANotificationDelegate>
+@property (nonatomic) AALogin *loginManager;
+
+@end
+
+@implementation AAViewController
+- (void)getUserAuthStatusMethod {
+   AAUserAgeGroup authStatus = 0;
+   self.loginManager = [[AALogin alloc] init];
+   authStatus = [self.loginManager getUserAuthenticationIdentity];
+}
+@end
+
+```
