@@ -27,6 +27,8 @@
 @property (nonatomic) UITextField *payNumberText;
 @property (nonatomic) UIButton *payNumberCheck;
 @property (nonatomic) UIButton *paySuccess;
+@property (nonatomic) UITextField *zplayIDText;
+@property (nonatomic) UIButton *loginWithZplayIDButton;
 @property (nonatomic) UIView *mask;
 @property (nonatomic) UITextView *console;
 
@@ -179,11 +181,38 @@
         make.size.mas_greaterThanOrEqualTo(CGSizeMake(paySuccessSize.width, paySuccessSize.height));
     }];
     
+    self.zplayIDText = [[UITextField alloc] init];
+    self.zplayIDText.backgroundColor = [UIColor blackColor];
+    self.zplayIDText.text = @"";
+    self.zplayIDText.keyboardType = UIKeyboardTypeNumberPad;
+    self.zplayIDText.textAlignment = NSTextAlignmentCenter;
+    self.zplayIDText.textColor = [UIColor whiteColor];
+    [self.view addSubview:self.zplayIDText];
+    [self.zplayIDText mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.paySuccess.mas_bottom).with.offset(margin);
+        make.centerX.equalTo(self.view.mas_centerX);
+        make.size.mas_greaterThanOrEqualTo(CGSizeMake(200, loginOutButtonSize.height));
+    }];
+    
+    self.loginWithZplayIDButton = [[UIButton alloc] init];
+    [self.loginWithZplayIDButton addTarget:self action:@selector(loginWithZplayID) forControlEvents:UIControlEventTouchUpInside];
+    self.loginWithZplayIDButton.backgroundColor = [UIColor blackColor];
+    self.loginWithZplayIDButton.layer.cornerRadius = 8;
+    self.loginWithZplayIDButton.layer.masksToBounds = YES;
+    [self.loginWithZplayIDButton setTitle:@"使用zplayID登录" forState:UIControlStateNormal];
+    CGSize loginWithZplayIDButtonSize = [self.loginWithZplayIDButton.titleLabel.text sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:self.loginWithZplayIDButton.titleLabel.font,NSFontAttributeName,nil]];
+    [self.view addSubview:self.loginWithZplayIDButton];
+    [self.loginWithZplayIDButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.zplayIDText.mas_bottom).with.offset(margin);
+        make.centerX.equalTo(self.view.mas_centerX);
+        make.size.mas_greaterThanOrEqualTo(CGSizeMake(loginWithZplayIDButtonSize.width, loginWithZplayIDButtonSize.height));
+    }];
+    
     self.console = [[UITextView alloc] init];
     self.console.backgroundColor = [UIColor grayColor];
     [self.view addSubview:self.console];
     [self.console mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.paySuccess.mas_bottom).with.offset(margin);
+        make.top.equalTo(self.loginWithZplayIDButton.mas_bottom).with.offset(margin);
         make.width.equalTo(self.view.mas_width).with.multipliedBy(0.8);
         make.bottom.equalTo(self.view.mas_bottom);
         make.centerX.equalTo(self.view.mas_centerX);
@@ -202,6 +231,11 @@
         [weakSelf.console scrollRangeToVisible:NSMakeRange(text.length, 1)];
         weakSelf.console.text = text;
     });
+}
+
+- (void)loginWithZplayID {
+    self.loginManager = [[AALogin alloc] init];
+    [self.loginManager loginWithZplayID:self.zplayIDText.text];
 }
 
 - (void)paySuccessMethod {
@@ -348,6 +382,7 @@
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     [self.payNumberText resignFirstResponder];
+    [self.zplayIDText resignFirstResponder];
 }
 
 - (void)didReceiveMemoryWarning
