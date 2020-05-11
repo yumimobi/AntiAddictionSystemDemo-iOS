@@ -1,4 +1,4 @@
-[See the English Guide](https://github.com/Atmosplay/AtmosplayAds-iOS/wiki)
+[See the English Guide](https://github.com/yumimobi/AntiAddictionSystemDemo-iOS/wiki)
 
 
 
