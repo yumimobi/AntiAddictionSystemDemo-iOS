@@ -3,8 +3,7 @@ use_frameworks!
 platform :ios, '9.0'
 
 target 'AntiAddictionSystemDemo-iOS_Example' do
-  pod 'AntiAddictionSystem', :path => '/Users/throwexception/Desktop/GameSDK/AntiAddictionSystem'
-#  pod 'AntiAddictionSystem', '0.1.7'
+ pod 'AntiAddictionSystem', '1.0.0'
 
   target 'AntiAddictionSystemDemo-iOS_Tests' do
     inherit! :search_paths
