@@ -338,7 +338,7 @@ pod install --repo-update
     self.payReport = [[AAPayNumberReport alloc] init];
     // 支付前检查用户是否被限额（成年人不受限制）
     // paynumber: 付费金额，单位分
-    [self.payReport reportNumberAfterPayment:payNumber];
+    [self.payReport checkNumberLimitBeforePayment:payNumber];
 }
 @end
 ```
