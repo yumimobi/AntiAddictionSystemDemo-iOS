@@ -373,7 +373,7 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-AntiAddictionSystemDemo-iOS_Example/Pods-AntiAddictionSystemDemo-iOS_Example-resources.sh",
-				"${PODS_CONFIGURATION_BUILD_DIR}/AntiAddictionSystem/AAResources.bundle",
+				"${PODS_ROOT}/AntiAddictionSystem/Resources/AAResources.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (

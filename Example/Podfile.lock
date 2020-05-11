@@ -22,24 +22,21 @@ PODS:
   - YYModel (1.0.4)
 
 DEPENDENCIES:
-  - AntiAddictionSystem (from `/Users/throwexception/Desktop/GameSDK/AntiAddictionSystem`)
+  - AntiAddictionSystem (= 1.0.0)
 
 SPEC REPOS:
   trunk:
     - AFNetworking
+    - AntiAddictionSystem
     - Masonry
     - YYModel
 
-EXTERNAL SOURCES:
-  AntiAddictionSystem:
-    :path: "/Users/throwexception/Desktop/GameSDK/AntiAddictionSystem"
-
 SPEC CHECKSUMS:
   AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
-  AntiAddictionSystem: 78986795eb890a150289add511e46b188e57880e
+  AntiAddictionSystem: 84523072e7ebf097707e2977b34098fafb2149fa
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
-PODFILE CHECKSUM: 69d3be126282cf1fd72fbc66d4cf3ce146dc1465
+PODFILE CHECKSUM: fb5e423ff28a5dfcbf30da9b92178fc11928ed81
 
 COCOAPODS: 1.9.0
