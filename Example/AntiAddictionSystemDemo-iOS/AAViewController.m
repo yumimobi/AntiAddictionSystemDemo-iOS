@@ -357,11 +357,13 @@
 // 用户支付失败时，在提示界面点击登录
 - (void)userClickLoginButtonInPaymentWarningVc {
     NSLog(@"AA---userClickLoginButtonInPaymentWarningVc");
+    [self addLog:@"userClickLoginButtonInPaymentWarningVc"];
     [self showLoginViewController];
 }
 // 用户游戏时长不足时，在提示界面点击登录
 - (void)userClickLoginButtonInNoTimeLeftWarningVc {
     NSLog(@"AA---userClickLoginButtonInNoTimeLeftWarningVc");
+    [self addLog:@"userClickLoginButtonInNoTimeLeftWarningVc"];
     [self showLoginViewController];
     self.mask = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.mask.backgroundColor = [UIColor blackColor];
